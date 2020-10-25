@@ -36,20 +36,38 @@ class TestProxy(unittest.TestCase):
             "password": ["I Love You Man", "Role Models"]}
         payload3 = {"email": "eve.holt@reqres.in", "password": "pistol"}
 
-        test_requests = [
+        results_a = []
+        requests_a = [
             (url1a, payload1, 201),
-            (url1b, payload1, 201),
             (url2a, payload2, 400),
+            (url2a, payload3, 200)
+        ]
+        results_b = []
+        requests_b = [
+            (url1b, payload1, 201),
             (url2b, payload2, 400),
-            (url2a, payload3, 200),
             (url2b, payload3, 200)
         ]
 
-        for (url, payload, result) in test_requests:
+        for (url, payload, result) in requests_a:
             r = requests.post(url=url, json=payload)
             self.assertEqual(r.status_code, result)
-            if TEST_DEBUG:
-                debug_response(r, headers=False)
+            results_a.append((r.status_code, r.content))
+
+        for (url, payload, result) in requests_b:
+            r = requests.post(url=url, json=payload)
+            self.assertEqual(r.status_code, result)
+            results_b.append((r.status_code, r.content))
+
+        for i in range(len(results_a)):
+            print(results_a[i][0], results_b[i][0])
+            print(results_a[i][1], results_b[i][1])
+            self.assertEquals(results_a[i][0], results_b[i][0])
+            if i != 0:  # content with CreatedAt
+                self.assertEquals(results_a[i][1], results_b[i][1])
+            # else:
+            #    self.assertEquals(
+            #    results_a[i][1]["id"], results_b[i][1]["id"])
 
     def test_endpoint_reqresin_get(self):
         url3a = ENDPOINT + "/api/users?page=2"
