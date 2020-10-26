@@ -1,11 +1,10 @@
 PYTHON=python3
 DOCKERFILE=Dockerfile
+IMAGE_NAME=castlab/proxy
 APP_NAME=proxy
 HTTP_PORT=8080
 
-.PHONY: clean build test_token build integration_test run stop
-
-all: build test_token
+.PHONY: clean lint run down build unit_test integration_test
 
 clean:
 	find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
@@ -13,27 +12,30 @@ clean:
 lint:
 	flake8
 
+build:
+	@echo "Building..."
+	docker-compose build --no-cache
+	echo "Building finished."
+
 unit_test:
 	@echo "Unit testing ..."
 	${PYTHON} -m unittest test.test_token
 	${PYTHON} -m unittest test.test_status
 	@echo "Unit testing finished."
 
-build: unit_test stop
-	@echo "Building..."
-	docker build -t ${APP_NAME} . -f ${DOCKERFILE}
-	@echo "Building finished."
-
-integration_test: build
-	@echo "Integration testing ..."	
-	docker run -d -p 8080:8080 --name ${APP_NAME} ${APP_NAME}
-	${PYTHON} -m unittest test.test_proxy
-	docker stop $(APP_NAME)
+integration_test: unit_test
+	@echo "Integration testing ..."
+	-docker-compose -p ${APP_NAME} down
+	docker-compose -p ${APP_NAME} up -d
+	-${PYTHON} -m unittest test.test_proxy
+	docker-compose -p ${APP_NAME} down
 	@echo "Integration testing finished."
 
-run: build
-	docker run -p ${HTTP_PORT}:8080 --name ${APP_NAME} ${APP_NAME}
-	#${PYTHON} ./proxy/proxy.py ${port}
+test: integration_test
 
-stop:
-	docker stop $(APP_NAME);docker rm $(APP_NAME)
+run:
+	-docker-compose -p ${APP_NAME} down
+	docker-compose -p ${APP_NAME} up
+
+down:
+	docker-compose -p ${APP_NAME} down
