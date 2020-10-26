@@ -2,8 +2,9 @@ version: "3.8"
    
 services:
   proxy:
+    environment: 
+      - HTTP_PORT=8080
     build: .
-    image: castlab/proxy
-    command: python proxy.py
+    command: python proxy.py ${HTTP_PORT}
     ports:
-      - "${HTTP_PORT}:8080"
+      - "8080:8080"
