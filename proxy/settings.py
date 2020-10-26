@@ -14,13 +14,13 @@ JWT_ALGO = 'HS512'
 #
 # proxy settings
 #
-PROXY_URL = "http://127.0.0.1"
+PROXY_HOST = "0.0.0.0"
 PROXY_PORT = 8080
 PROXY_STATUS_PATH = "/status"
 PROXY_ENDPOINT = "https://reqres.in"
 PROXY_JWT_HEADER = "x-my-jwt"
-PROXY_LOG = "proxy.log"
 #
-# other settings
+# testing settings
 #
+PROXY_URL = "http://127.0.0.1"
 TEST_DEBUG = True

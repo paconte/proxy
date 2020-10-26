@@ -12,7 +12,7 @@ import status
 import jwttoken
 
 
-proxy_host = settings.PROXY_URL
+proxy_host = settings.PROXY_HOST
 proxy_port = settings.PROXY_PORT
 proxy_endpoint = settings.PROXY_ENDPOINT
 proxy_status_path = settings.PROXY_STATUS_PATH
@@ -141,4 +141,4 @@ if __name__ == '__main__':
         print("Please use: python3 proxy.py [port=number] where number>1024")
         exit(1)
 
-    start_server("", proxy_port)
+    start_server(proxy_host, proxy_port)
