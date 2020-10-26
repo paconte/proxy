@@ -4,6 +4,5 @@ services:
   proxy:
     build: .
     image: castlab/proxy
-    command: python proxy.py
     ports:
       - "8080:8080"
