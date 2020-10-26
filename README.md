@@ -12,6 +12,7 @@ A proxy that add a authentification token to all post request and forward the re
 
 * Docker version 19.03.12
 * docker-compose version 1.27.4
+* Python 3.8.2
 
 ### Executing program
 
