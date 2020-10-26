@@ -4,7 +4,7 @@ IMAGE_NAME=castlab/proxy
 APP_NAME=proxy
 HTTP_PORT=8080
 
-.PHONY: clean lint run down build unit_test integration_test
+.PHONY: help clean lint run down build unit_test integration_test
 
 clean:
 	find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
@@ -39,3 +39,14 @@ run:
 
 down:
 	docker-compose -p ${APP_NAME} down
+
+help:
+	@echo ''
+	@echo 'Usage: make [TARGET]'
+	@echo 'Targets:'
+	@echo '  build    	build docker --image--'
+	@echo '  test     	test docker --container--'
+	@echo '  run    	run as service --container--'
+	@echo '  clean    	remove python bytecode'
+	@echo '  lint    	linting with flake8'
+	@echo ''
