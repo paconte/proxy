@@ -68,7 +68,7 @@ class TestProxy(unittest.TestCase):
         for i in range(len(results_a)):
             print(results_a[i][0], results_b[i][0])
             print(results_a[i][1], results_b[i][1])
-            self.assertEquals(results_a[i][0], results_b[i][0])
+            self.assertEqual(results_a[i][0], results_b[i][0])
             if i != 0:  # content with CreatedAt
                 self.assertEquals(results_a[i][1], results_b[i][1])
             # else:
