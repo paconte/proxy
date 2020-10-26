@@ -50,11 +50,17 @@ class TestProxy(unittest.TestCase):
         ]
 
         for (url, payload, result) in requests_a:
-            r = requests.post(url=url, json=payload)
+            headers = {
+                'Content-Type': 'application/json',
+                'Content-Length': str(len(payload))}
+            r = requests.post(url=url, json=payload, headers=headers)
             self.assertEqual(r.status_code, result)
             results_a.append((r.status_code, r.content))
 
         for (url, payload, result) in requests_b:
+            headers = {
+                'Content-Type': 'application/json',
+                'Content-Length': str(len(payload))}
             r = requests.post(url=url, json=payload)
             self.assertEqual(r.status_code, result)
             results_b.append((r.status_code, r.content))
