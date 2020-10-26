@@ -3,6 +3,8 @@ version: "3.8"
 services:
   proxy:
     build: .
+    container_name: proxy
     image: castlab/proxy
+    #command: python proxy.py
     ports:
       - "8080:8080"
