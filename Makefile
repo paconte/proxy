@@ -4,7 +4,7 @@ IMAGE_NAME=castlab/proxy
 APP_NAME=proxy
 HTTP_PORT=8080
 
-.PHONY: help clean lint run down build unit_test integration_test
+.PHONY: help clean lint run down build test
 
 clean:
 	find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
@@ -17,23 +17,22 @@ build:
 	docker-compose build --no-cache
 	echo "Building finished."
 
-unit_test:
-	@echo "Unit testing ..."
-	${PYTHON} -m unittest test.test_token
-	${PYTHON} -m unittest test.test_status
-	@echo "Unit testing finished."
-
-integration_test: unit_test
+test:
 	@echo "Integration testing ..."
 	-docker-compose -p ${APP_NAME} down
 	docker-compose -p ${APP_NAME} up -d
-	-${PYTHON} -m unittest test.test_proxy
+	-docker exec ${APP_NAME} bash -c "cd /opt/proxy && python -m unittest"
 	docker-compose -p ${APP_NAME} down
 	@echo "Integration testing finished."
 
-test: integration_test
-
 run:
+	#-docker-compose -p ${APP_NAME} down
+	#docker-compose -p ${APP_NAME} up
+	-docker stop $(APP_NAME);docker rm $(APP_NAME)
+	@echo "Starting httpd on host port ${HTTP_PORT}"
+	docker run -p ${HTTP_PORT}:8080 --name ${APP_NAME} ${IMAGE_NAME}
+
+run-compose:
 	-docker-compose -p ${APP_NAME} down
 	docker-compose -p ${APP_NAME} up
 
